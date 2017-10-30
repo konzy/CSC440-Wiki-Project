@@ -263,3 +263,71 @@ class WikiTestCase(WikiBaseTestCase):
 
         testpage = pages[1]
         assert testpage.url == 'test'
+
+    def test_move(self):
+        """
+        Assert that move correctly moves a page
+        :return:
+        """
+        self.create_file('move.md', PAGE_CONTENT)
+        self.wiki.move( 'move.md', self.rootdir + '/movetest/move.md')
+        self.wiki.move( self.rootdir + '/movetest/move.md', self.rootdir + "/move.md")
+        assert os.path.exists( self.rootdir + '/movetest/move.md') is False
+        assert os.path.exists( self.rootdir + '/move.md')
+
+    def test_tags(self):
+        """
+        Test tags
+        :return:
+        """
+        self.create_file( "tags.md", PAGE_CONTENT )
+        tags = self.wiki.get_tags()
+        test_tags = [ u'one', u'two', u'3', u'jö' ]
+        for tag in tags.keys():
+            assert tag in test_tags
+
+    def test_index_by_tag(self):
+        """
+        Test indexing by tags
+        :return:
+        """
+        self.create_file("tag_index.md", PAGE_CONTENT)
+        pages = self.wiki.index_by_tag(u'two')
+        assert pages[0].path == self.rootdir + "/tag_index.md"
+
+    def test_search(self):
+        """
+        Test search function
+        :return:
+        """
+        self.create_file("search.md", PAGE_CONTENT)
+        pages = self.wiki.search("guys")
+        assert pages[0].path == self.rootdir + "/search.md"
+
+    def test_gets(self):
+        """
+        Test all three get functions
+        :return:
+        """
+        self.create_file("gets.md", PAGE_CONTENT)
+        caught = False
+        page1 = self.wiki.get(self.rootdir + "/gets.md")
+        page2 = self.wiki.get_bare(self.rootdir + "/gets.md")
+        page3 = self.wiki.get_or_404(self.rootdir + "/gets.md")
+        try:
+            page4 = self.wiki.get_or_404(self.rootdir + "/derp.md")
+        except( Exception ):
+            caught = True
+        assert caught == True
+        assert page2 == False
+        for page in [page1, page3]:
+            assert page.path == self.rootdir + "/gets.md"
+
+    def test_index_by(self):
+        """
+        Test the index_by function
+        :return:
+        """
+        self.create_file("index_by.md", PAGE_CONTENT)
+        tags = self.wiki.index_by(u'tags')
+        assert tags.keys()[0] == u'one, two, 3, jö'

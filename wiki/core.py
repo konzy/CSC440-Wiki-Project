@@ -243,15 +243,18 @@ class Wiki(object):
         self.root = root
 
     def path(self, url):
-        return os.path.join(self.root, url + '.md')
+        if url[-3:] == '.md':
+            return os.path.join(self.root, url)
+        else:
+            return os.path.join(self.root, url + '.md')
 
     def exists(self, url):
         path = self.path(url)
         return os.path.exists(path)
 
     def get(self, url):
-        path = os.path.join(self.root, url + '.md')
-        if self.exists(url):
+        path = os.path.join(self.root, url )
+        if os.path.exists(url):
             return Page(path, url)
         return None
 
@@ -268,8 +271,8 @@ class Wiki(object):
         return Page(path, url, new=True)
 
     def move(self, url, newurl):
-        source = os.path.join(self.root, url) + '.md'
-        target = os.path.join(self.root, newurl) + '.md'
+        source = os.path.join(self.root, url)
+        target = os.path.join(self.root, newurl)
         # normalize root path (just in case somebody defined it absolute,
         # having some '../' inside) to correctly compare it to the target
         root = os.path.normpath(self.root)
