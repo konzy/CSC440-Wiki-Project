@@ -7,10 +7,9 @@
 .cache/*
 
 # User-specific stuff:
-.idea
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/misc.xml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/misc.xml
 .idea/dictionaries
 
 # Sensitive or high-churn files:
@@ -57,4 +56,3 @@ fabric.properties
 
 .DS_Store
 .cache/
-.idea/
