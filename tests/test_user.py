@@ -8,16 +8,16 @@ class UserTestCase(TestCase):
     """
 
     def test_new_json_file(self):
-        os.remove("tests/users.json")
-        um = UserManager("tests")
+        os.remove("users.json")
+        um = UserManager("")
 
-        um = UserManager("tests")
+        um = UserManager("")
 
     """
         Tests creating a new json file, and tries to create a new file when one is already made
     """
     def test_user_read_write_json(self):
-        um = UserManager("tests")
+        um = UserManager("")
         json = um.read()
 
         assert json is not None
@@ -31,7 +31,7 @@ class UserTestCase(TestCase):
 
         username = "clear name"
         password = "clear pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         cleartext_user = um.add_user(username, password, True, ["admin"], "cleartext")
 
@@ -40,7 +40,7 @@ class UserTestCase(TestCase):
     def test_same_name(self):
         username = "clear name"
         password = "clear pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         cleartext_user = um.add_user(username, password, True, ["admin"], "cleartext")
 
@@ -49,7 +49,7 @@ class UserTestCase(TestCase):
     def test_not_implemented_auth(self):
         username = "none name"
         password = "none pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         is_caught = False
 
@@ -65,7 +65,7 @@ class UserTestCase(TestCase):
 
         username = "hash name"
         password = "hash pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         hash_user = um.add_user(username, password, True, ["admin"], "hash")
 
@@ -74,7 +74,7 @@ class UserTestCase(TestCase):
     def test_user_get(self):
         username = "get name"
         password = "get pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         cleartext_user = um.add_user(username, password, True, ["admin"], "cleartext")
 
@@ -83,7 +83,7 @@ class UserTestCase(TestCase):
     def test_user_delete(self):
         username = "delete name"
         password = "delete pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         cleartext_user = um.add_user(username, password, True, ["admin"], "cleartext")
 
@@ -98,7 +98,7 @@ class UserTestCase(TestCase):
     def test_user_update(self):
         username = "update name"
         password = "update pass"
-        um = UserManager("tests")
+        um = UserManager("")
 
         cleartext_user = um.add_user(username, password, True, ["admin"], "cleartext")
 
