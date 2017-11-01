@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 SECRET_KEY='a unique and long key'
-TITLE='Riki' 
+TITLE='Megatron'
 HISTORY_SHOW_MAX=30
 PIC_BASE = '/static/content/'
 CONTENT_DIR = '/home/ethan/PycharmProjects/CSC440-Wiki-Project/content'
