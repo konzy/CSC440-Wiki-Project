@@ -1,16 +1,13 @@
 *.pyc
-*.uml
 
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-.cache/*
-
 # User-specific stuff:
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/misc.xml
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/misc.xml
 .idea/dictionaries
 
 # Sensitive or high-churn files:
@@ -54,6 +51,8 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+<<<<<<< HEAD
+=======
 
 .DS_Store
-.cache/
+>>>>>>> 05e4f5fa55f71462cefa1e584c61d08987bb6959
