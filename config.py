@@ -1,5 +1,4 @@
 # encoding: utf-8
-import os
 
 SECRET_KEY='a unique and long key'
 TITLE='Megatron'
