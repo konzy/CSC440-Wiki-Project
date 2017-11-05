@@ -5,6 +5,7 @@
 from flask import Blueprint
 from flask import flash
 from flask import redirect
+from flask import request
 from flask import render_template
 from flask import request
 from flask import url_for
@@ -12,6 +13,7 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from string import replace
 
 from wiki.core import Processor
 from wiki.web.forms import EditorForm
@@ -20,6 +22,7 @@ from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
+from wiki.web import base_addr ##for use in to_pdf etc
 from wiki.web.user import protect
 
 
@@ -34,6 +37,22 @@ def home():
         return display('home')
     return render_template('home.html')
 
+
+@bp.route('/topdf/')
+@protect #this just wraps the function to make sure the user is authenticated
+def toPdf():
+    ##get urls
+    index = current_wiki.index()
+    for page in index:
+        print url_for('wiki.display', url=page.url)
+        ##TODO store these in something, we need url and path to the .md file
+    ##get current url
+    ref = request.referrer
+    ref = ref.replace(base_addr, '')
+    ##TODO match current url to that of a page from the index, and thus a path to its markdown file
+    ##TODO make sure that we deal with the edge case of home having a special url ( '/' )
+    ##TODO call pandoc to make pdf with this path
+    return redirect(request.referrer) ##don't navigate away from the page
 
 @bp.route('/index/')
 @protect
@@ -168,7 +187,6 @@ def user_admin(user_id):
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
-
 
 """
     Error Handlers

@@ -35,4 +35,8 @@
   <li><a href="{{ url_for('wiki.move', url=page.url) }}">Move</a></li>
   <li><a href="#confirmDelete" data-toggle="modal" class="text-error">Delete</a></li>
 </ul>
+<h3>Plugins</h3>
+<ul class="nav nav-tabs nav-stacked">
+  <li><a href="{{ url_for('wiki.toPdf', url=page.url) }}">To Pdf</a></li>
+</ul>
 {% endblock sidebar %}

@@ -48,10 +48,11 @@ def create_app(directory):
 
     return app
 
-
 loginmanager = LoginManager()
 loginmanager.login_view = 'wiki.user_login'
 
 @loginmanager.user_loader
 def load_user(name):
     return current_users.get_user(name)
+
+base_addr = 'http://127.0.0.1:5000'
