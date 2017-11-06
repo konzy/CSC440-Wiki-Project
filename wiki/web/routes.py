@@ -25,6 +25,9 @@ from wiki.web import current_users
 from wiki.web import base_addr ##for use in to_pdf etc
 from wiki.web.user import protect
 
+import smtplib
+from string import Template
+
 
 bp = Blueprint('wiki', __name__)
 
@@ -53,6 +56,41 @@ def toPdf():
     ##TODO make sure that we deal with the edge case of home having a special url ( '/' )
     ##TODO call pandoc to make pdf with this path
     return redirect(request.referrer) ##don't navigate away from the page
+
+
+def email(page):
+    #get the contacts to send email to
+    names = []
+    emails = []
+    with open("content/contacts.txt", mode='r', encoding='utf-8') as contacts_file:
+        for a_contact in contacts_file:
+            if(a_contact.split()[2] == page):
+                names.append(a_contact.split()[0])
+                emails.append(a_contact.split()[1])
+
+    #get the message ready to send to the contacts
+    with open("content/message.txt", 'r', encoding='utf-8') as template_file:
+        template_file_content = template_file.read()
+    message_template = Template(template_file_content)
+
+    # set up the SMTP server
+    s = smtplib.SMTP('smtp.gmail.com:587')
+    s.starttls()
+    s.login("megatroniki2017@gmail.com", "megatron1234")
+
+    #send the email
+    sender = 'megatroniki2017@gmail.com'
+    receivers = emails
+
+    message = message_template.substitute(PAGE=page)
+
+    try:
+        smtpObj = smtplib.SMTP('localhost')
+        smtpObj.sendmail(sender, receivers, message)
+        print "Successfully sent email"
+    except smtplib.SMTPException:
+        print "Error: unable to send email"
+
 
 @bp.route('/index/')
 @protect
@@ -89,6 +127,7 @@ def edit(url):
         form.populate_obj(page)
         page.save()
         flash('"%s" was saved.' % page.title, 'success')
+        email(url)
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
 
