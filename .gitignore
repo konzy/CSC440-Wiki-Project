@@ -12,6 +12,7 @@
 .idea/tasks.xml
 .idea/misc.xml
 .idea/dictionaries
+.idea/CSC440-Wiki-Project.iml
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
