@@ -33,7 +33,6 @@ class SearchForm(Form):
         # FIXME: default is not correctly populated
         default=True)
 
-
 class EditorForm(Form):
     title = TextField('', [InputRequired()])
     body = TextAreaField('', [InputRequired()])

@@ -188,6 +188,12 @@ def user_admin(user_id):
 def user_delete(user_id):
     pass
 
+@bp.route('/settings')
+@protect
+def settings():
+    return render_template("settings.html")
+
+
 """
     Error Handlers
     ~~~~~~~~~~~~~~
