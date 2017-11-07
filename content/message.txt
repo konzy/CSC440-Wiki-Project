@@ -1,0 +1,4 @@
+Dear User,
+${PAGE} was edited on Megatroniki.
+Have a great day!
+Yours Truly
