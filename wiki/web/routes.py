@@ -17,6 +17,7 @@ from string import replace
 
 from wiki.core import Processor
 from wiki.web.forms import EditorForm
+from wiki.web.forms import SettingsForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
@@ -207,31 +208,47 @@ def user_logout():
     flash('Logout successful.', 'success')
     return redirect(url_for('wiki.index'))
 
-
 @bp.route('/user/')
 def user_index():
     pass
-
 
 @bp.route('/user/create/')
 def user_create():
     pass
 
-
 @bp.route('/user/<int:user_id>/')
 def user_admin(user_id):
     pass
-
 
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
 
-@bp.route('/settings')
+@bp.route('/settings/', methods=['GET', 'POST'])
 @protect
-def settings():
-    return render_template("settings.html")
+def settings( ):
+    email = current_user.get('email')
+    editor = current_user.get('editor')
+    if email == "":
+        email = "Enter your email"
+    if editor == "":
+        editor = "Enter the path to your preferred text editor"
+    form = SettingsForm()
+    if form.validate_on_submit():
+        return render_template('settings.html', form=form, email=email, editor=editor)
+    return render_template('settings.html', form=form, email=email, editor=editor)
 
+@bp.route('/setEditor/', methods=['POST'])
+def setEditor():
+    editor = request.form['value']
+    current_user.set('editor', editor)
+    return redirect(request.referrer)
+
+@bp.route('/setEmail/', methods=['POST'])
+def setEmail():
+    email = request.form['value']
+    current_user.set('email', email)
+    return redirect(request.referrer)
 
 """
     Error Handlers

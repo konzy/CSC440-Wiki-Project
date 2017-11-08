@@ -38,6 +38,8 @@ class EditorForm(Form):
     body = TextAreaField('', [InputRequired()])
     tags = TextField('')
 
+class SettingsForm(Form):
+    value = TextField('', [])
 
 class LoginForm(Form):
     name = TextField('', [InputRequired()])

@@ -1,16 +1,20 @@
 {
   "name": {
-    "active": true, 
-    "authentication_method": "cleartext", 
-    "password": "1234", 
     "authenticated": true, 
-    "roles": []
+    "roles": [], 
+    "authentication_method": "cleartext", 
+    "editor": "gedit", 
+    "active": true, 
+    "password": "1234", 
+    "email": "gallaghere2@mymail.nku.edu"
   }, 
   "sam": {
-    "active": true, 
-    "authentication_method": "cleartext", 
-    "password": "1234", 
     "authenticated": true, 
-    "roles": []
+    "roles": [], 
+    "authentication_method": "cleartext", 
+    "editor": "gedit", 
+    "active": true, 
+    "password": "1234", 
+    "email": "gallaghere2@mymail.nku.edu"
   }
 }
