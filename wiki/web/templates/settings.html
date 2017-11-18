@@ -7,7 +7,7 @@
 <div class="tab-content">
 	<div class="tab-pane active" id="settings">
 		Email:
-		<form action="{{url_for('wiki.setEmail'), url=page.url }}" method="post" class="form">
+		<form action="{{url_for('wiki.setEmail', url=settingsUrl) }}" method="post" class="form">
 			{{ form.hidden_tag() }}
 			{{ input(form.value, placeholder=email, class="span7", autocomplete="off") }}
 			<div class="form-actions">
@@ -17,7 +17,7 @@
 			</div>
 		</form>
 		Editor path:
-		<form action="{{url_for('wiki.setEditor'), url=page.url }}" method="post" class="form">
+		<form action="{{url_for('wiki.setEditor', url=settingsUrl) }}" method="post" class="form">
 			{{ form.hidden_tag() }}
 			{{ input(form.value, placeholder=editor, class="span7", autocomplete="off") }}
 			<div class="form-actions">

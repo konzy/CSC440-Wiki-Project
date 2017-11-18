@@ -229,14 +229,15 @@ def user_delete(user_id):
 def settings( ):
     email = current_user.get('email')
     editor = current_user.get('editor')
+    settingsUrl = "settings"
     if email == "":
         email = "Enter your email"
     if editor == "":
         editor = "Enter the path to your preferred text editor"
     form = SettingsForm()
     if form.validate_on_submit():
-        return render_template('settings.html', form=form, email=email, editor=editor)
-    return render_template('settings.html', form=form, email=email, editor=editor)
+        return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
+    return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
 
 @bp.route('/setEditor/<path:url>/', methods=['POST'])
 @protect
