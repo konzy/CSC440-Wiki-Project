@@ -383,3 +383,25 @@ class Wiki(object):
                     matched.append(page)
                     break
         return matched
+
+    ##returns all the source files by either title, type, or by a search of the body
+    ##uses the search function, so it admits regex
+    ##returns a list of paths to md files
+    def source_files_by_search(self, term, ignore_case=True, attr_type=['title']):
+        retList = list()
+        if term is None or term == []:
+            return "source_files_by_search: Invalid term, None or empty list"
+        pages = self.search(term, ignore_case, attr_type)
+        for page in pages:
+            retList.append( page.path )
+        return retList
+
+    ##returns given attr from the url of a page
+    ##valid attrs include: "path" ( to source file ), "title", "tags", "url" etc.
+    ##will return None if url is invalid
+    def attr_by_url(self, attr, url):
+        pages = self.index()
+        for page in pages:
+            if url == page.url:
+                return eval('page.' + attr)
+        return None

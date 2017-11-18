@@ -238,17 +238,39 @@ def settings( ):
         return render_template('settings.html', form=form, email=email, editor=editor)
     return render_template('settings.html', form=form, email=email, editor=editor)
 
-@bp.route('/setEditor/', methods=['POST'])
-def setEditor():
+@bp.route('/setEditor/<path:url>/', methods=['POST'])
+@protect
+def setEditor(url):
     editor = request.form['value']
     current_user.set('editor', editor)
-    return redirect(request.referrer)
+    return redirect(url)
 
-@bp.route('/setEmail/', methods=['POST'])
-def setEmail():
+@bp.route('/setEmail/<path:url>/', methods=['POST'])
+@protect
+def setEmail(url):
     email = request.form['value']
     current_user.set('email', email)
-    return redirect(request.referrer)
+    return redirect(url)
+
+@bp.route('/googleScholar/<path:url>/', methods=['GET'])
+@protect
+def googleScholar(url):
+    title = current_wiki.attr_by_url('title', url)
+    title = title.replace(' ', '+')
+    googleURL = 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C18&q=' + title + '&btnG='
+    return redirect(googleURL)
+
+@bp.route("/customEditor/<path:url>", methods=['GET'])
+@protect
+def customEditor(url):
+    return redirect(url)
+
+@bp.route("/testRoute/<path:url>")
+@protect
+def testRoute(url):
+    list = current_wiki.attr_by_url('path', 'world')
+    return redirect(url)
+
 
 """
     Error Handlers

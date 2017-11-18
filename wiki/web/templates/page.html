@@ -38,5 +38,8 @@
 <h3>Plugins</h3>
 <ul class="nav nav-tabs nav-stacked">
   <li><a href="{{ url_for('wiki.toPdf', url=page.url) }}">To Pdf</a></li>
+  <li><a href="{{ url_for('wiki.googleScholar', url=page.url) }}", target="_blank">Google Scholar</a></li>
+  <li><a href="{{ url_for('wiki.customEditor', url=page.url) }}">Custom Editor</a></li>
+  <li><a href="{{ url_for('wiki.testRoute', url=page.url) }}">Testing route</a></li>
 </ul>
 {% endblock sidebar %}
