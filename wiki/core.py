@@ -236,6 +236,7 @@ class Page(object):
             self.load()
             self.render()
 
+
     @property
     def meta(self):
         return self._meta
