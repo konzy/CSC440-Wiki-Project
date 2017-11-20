@@ -3,10 +3,10 @@
     "authenticated": true, 
     "roles": [], 
     "authentication_method": "cleartext", 
-    "editor": "gedit", 
+    "editor": "", 
     "active": true, 
     "password": "1234", 
-    "email": "gallaghere2@mymail.nku.edu"
+    "email": "cmschwegman@gmail.com"
   }, 
   "sam": {
     "authenticated": true, 

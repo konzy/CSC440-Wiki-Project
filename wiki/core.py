@@ -11,6 +11,10 @@ from flask import abort
 from flask import url_for
 import markdown
 
+import smtplib
+from string import Template
+from string import replace
+
 
 def clean_url(url):
     """
@@ -65,6 +69,40 @@ def wikilink(text, url_formatter=None):
         )
         text = re.sub(link_regex, html_url, text, count=1)
     return text
+
+def email(page, current_user):
+    #get the contacts to send email to
+    names = []
+    emails = []
+    with open("content/subscriptions.txt", mode='r', encoding='utf-8') as contacts_file:
+        for a_contact in contacts_file:
+            if(a_contact.split()[1] == page):
+                names.append(a_contact.split()[0])
+                emails.append(current_user.get('email'))
+
+    #get the message ready to send to the contacts
+    with open("content/message.txt", 'r', encoding='utf-8') as template_file:
+        template_file_content = template_file.read()
+    message_template = Template(template_file_content)
+
+    try:
+        # set up the SMTP server
+        s = smtplib.SMTP('smtp.gmail.com:587')
+        s.starttls()
+        s.login('megatroniki2017@gmail.com', 'megatron1234')
+
+        #send the email
+        sender = 'megatroniki2017@gmail.com'
+        receivers = emails
+
+        message = message_template.substitute(PAGE=page)
+
+
+        #smtpObj = smtplib.SMTP('localhost')
+        s.sendmail(sender, receivers, message)
+        print "Successfully sent email"
+    except smtplib.SMTPException:
+        print "Error: unable to send email"
 
 
 class Processor(object):
@@ -383,3 +421,4 @@ class Wiki(object):
                     matched.append(page)
                     break
         return matched
+
