@@ -191,26 +191,49 @@ def user_delete(user_id):
 def settings( ):
     email = current_user.get('email')
     editor = current_user.get('editor')
+    settingsUrl = "settings"
     if email == "":
         email = "Enter your email"
     if editor == "":
         editor = "Enter the path to your preferred text editor"
     form = SettingsForm()
     if form.validate_on_submit():
-        return render_template('settings.html', form=form, email=email, editor=editor)
-    return render_template('settings.html', form=form, email=email, editor=editor)
+        return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
+    return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
 
-@bp.route('/setEditor/', methods=['POST'])
-def setEditor():
+@bp.route('/setEditor/<path:url>/', methods=['POST'])
+@protect
+def setEditor(url):
     editor = request.form['value']
     current_user.set('editor', editor)
-    return redirect(request.referrer)
+    return redirect(url)
 
-@bp.route('/setEmail/', methods=['POST'])
-def setEmail():
+@bp.route('/setEmail/<path:url>/', methods=['POST'])
+@protect
+def setEmail(url):
     email = request.form['value']
     current_user.set('email', email)
-    return redirect(request.referrer)
+    return redirect(url)
+
+@bp.route('/googleScholar/<path:url>/', methods=['GET'])
+@protect
+def googleScholar(url):
+    title = current_wiki.attr_by_url('title', url)
+    title = title.replace(' ', '+')
+    googleURL = 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C18&q=' + title + '&btnG='
+    return redirect(googleURL)
+
+@bp.route("/customEditor/<path:url>", methods=['GET'])
+@protect
+def customEditor(url):
+    return redirect(url)
+
+@bp.route("/testRoute/<path:url>")
+@protect
+def testRoute(url):
+    list = current_wiki.attr_by_url('path', 'world')
+    return redirect(url)
+
 
 @bp.route('/subscribe/<path:url>')
 @protect #this just wraps the function to make sure the user is authenticated
