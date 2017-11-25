@@ -25,6 +25,8 @@ from wiki.web import current_users
 from wiki.web import base_addr ##for use in to_pdf etc
 from wiki.web.user import protect
 
+from os import system
+
 
 
 bp = Blueprint('wiki', __name__)
@@ -226,14 +228,32 @@ def googleScholar(url):
 @bp.route("/customEditor/<path:url>", methods=['GET'])
 @protect
 def customEditor(url):
+    source_path = current_wiki.attr_by_url( "path", url )
+    editor_path = current_user.get("editor")
+    system(editor_path + " " + source_path)
     return redirect(url)
 
 @bp.route("/testRoute/<path:url>")
 @protect
 def testRoute(url):
-    list = current_wiki.attr_by_url('path', 'world')
+    temp = current_user.is_anonymous()
     return redirect(url)
 
+@bp.route("/ebook/", methods=['GET', 'POST'])
+@protect
+def ebook():
+    ebookUrl = "ebook"
+    form = SettingsForm()
+    if form.validate_on_submit():
+        return render_template('ebook.html', form=form, ebookUrl=ebookUrl)
+    return render_template('ebook.html', form=form, ebookUrl=ebookUrl)
+
+@bp.route("/ebookGen/<path:url>", methods=['POST'])
+@protect
+def ebookGen(url):
+    ebook_req = request.form['value']
+    current_wiki.chapterfy_and_build( current_wiki.assemble_source_list ( current_wiki.parse_request( ebook_req )))
+    return redirect(url)
 
 @bp.route('/subscribe/<path:url>')
 @protect #this just wraps the function to make sure the user is authenticated
