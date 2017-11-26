@@ -40,7 +40,9 @@ class UserManager(object):
             'active': active,
             'roles': roles,
             'authentication_method': authentication_method,
-            'authenticated': False
+            'authenticated': False,
+            'email' : "",
+            'editor' : ""
         }
         # Currently we have only two authentication_methods: cleartext and
         # hash. If we get more authentication_methods, we will need to go to a

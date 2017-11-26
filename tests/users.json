@@ -1,0 +1,56 @@
+{
+  "Test2": {
+    "active": true, 
+    "authentication_method": "cleartext", 
+    "password": "password", 
+    "authenticated": false, 
+    "roles": [
+      "Admin"
+    ]
+  }, 
+  "Hash": {
+    "active": true, 
+    "authentication_method": "hi", 
+    "authenticated": true, 
+    "roles": [
+      "Admin"
+    ], 
+    "hash": "6350a4782193d5432cb8d9a45a7ec785cf2605ef358b783f9fa573d6b49729c64e061b91ffb170466eb8356e40b1ee60d3a3573e2d0ab4d111ea78b53f9d87b324198ef7337fee562d0d14c3bd674553b14f5723cf84f488ddffe051852c3c5468f02eeeb4bf4b3c7893a7661331f8682430773b4587a7fe411b7553900d0263"
+  }, 
+  "clear name": {
+    "active": true, 
+    "authentication_method": "cleartext", 
+    "password": "clear pass", 
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ]
+  }, 
+  "hash name": {
+    "active": true, 
+    "authentication_method": "hash", 
+    "authenticated": false, 
+    "hash": "a6f3fc2337772591627d9294771caecc28b236c448b8f8844dab371a03d41fbb572e2170d2063dae3f659675241f3105d2a47fc71ef0ad0c766bc006e312268ae1ccf77535ff862ac3607b571785c70007d070da15c6cb8e0c1bfc34abd05cfdc492ea86b37a1a8c590fe1f5dad6360e450dd168200bd87e807d4bd911f68726", 
+    "roles": [
+      "admin"
+    ]
+  }, 
+  "update name": {
+    "active": true, 
+    "authentication_method": "cleartext", 
+    "password": "update pass", 
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ]
+  }, 
+  "get name": {
+    "active": true, 
+    "authentication_method": "cleartext", 
+    "password": "get pass", 
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ]
+  }
+}

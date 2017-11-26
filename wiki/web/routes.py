@@ -16,10 +16,10 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
-from string import replace
 
-from wiki.core import Processor
+from wiki.core import Processor, email
 from wiki.web.forms import EditorForm
+from wiki.web.forms import SettingsForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
@@ -33,6 +33,7 @@ import os
 import sys
 
 import pypandoc
+
 
 bp = Blueprint('wiki', __name__)
 
@@ -89,6 +90,7 @@ def edit(url):
         form.populate_obj(page)
         page.save()
         flash('"%s" was saved.' % page.title, 'success')
+        email(url, current_user)
         return redirect(url_for('wiki.display', url=url))
     return render_template('editor.html', form=form, page=page)
 
@@ -168,25 +170,86 @@ def user_logout():
     flash('Logout successful.', 'success')
     return redirect(url_for('wiki.index'))
 
-
 @bp.route('/user/')
 def user_index():
     pass
-
 
 @bp.route('/user/create/')
 def user_create():
     pass
 
-
 @bp.route('/user/<int:user_id>/')
 def user_admin(user_id):
     pass
 
-
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
+
+
+@bp.route('/settings/', methods=['GET', 'POST'])
+@protect
+def settings( ):
+    email = current_user.get('email')
+    editor = current_user.get('editor')
+    settingsUrl = "settings"
+    if email == "":
+        email = "Enter your email"
+    if editor == "":
+        editor = "Enter the path to your preferred text editor"
+    form = SettingsForm()
+    if form.validate_on_submit():
+        return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
+    return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
+
+@bp.route('/setEditor/<path:url>/', methods=['POST'])
+@protect
+def setEditor(url):
+    editor = request.form['value']
+    current_user.set('editor', editor)
+    return redirect(url)
+
+@bp.route('/setEmail/<path:url>/', methods=['POST'])
+@protect
+def setEmail(url):
+    email = request.form['value']
+    current_user.set('email', email)
+    return redirect(url)
+
+@bp.route('/googleScholar/<path:url>/', methods=['GET'])
+@protect
+def googleScholar(url):
+    title = current_wiki.attr_by_url('title', url)
+    title = title.replace(' ', '+')
+    googleURL = 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C18&q=' + title + '&btnG='
+    return redirect(googleURL)
+
+@bp.route("/customEditor/<path:url>", methods=['GET'])
+@protect
+def customEditor(url):
+    return redirect(url)
+
+@bp.route("/testRoute/<path:url>")
+@protect
+def testRoute(url):
+    list = current_wiki.attr_by_url('path', 'world')
+    return redirect(url)
+
+
+@bp.route('/subscribe/<path:url>')
+@protect #this just wraps the function to make sure the user is authenticated
+def subscribe(url):
+    alreadySub = False
+    with open("content/subscriptions.txt", mode='r') as contacts_file:
+        for a_contact in contacts_file:
+            if(a_contact.split()[1] == str(current_user.get_id())):
+                if(a_contact.split()[0] == str(url)):
+                    alreadySub = True
+    if(not alreadySub):
+        f = open('content/subscriptions.txt', 'a+')
+        f.write(str(url) + ' ' + str(current_user.get_id()) + '\n')
+        f.close()
+    return redirect(request.referrer)  ##don't navigate away from the page
 
 
 """

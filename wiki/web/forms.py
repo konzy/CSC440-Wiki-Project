@@ -33,12 +33,13 @@ class SearchForm(Form):
         # FIXME: default is not correctly populated
         default=True)
 
-
 class EditorForm(Form):
     title = TextField('', [InputRequired()])
     body = TextAreaField('', [InputRequired()])
     tags = TextField('')
 
+class SettingsForm(Form):
+    value = TextField('', [])
 
 class LoginForm(Form):
     name = TextField('', [InputRequired()])
