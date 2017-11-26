@@ -9,6 +9,9 @@ from flask import request
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import stream_with_context, Response
+from flask import send_file
+from flask import send_from_directory
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
@@ -22,9 +25,14 @@ from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
-from wiki.web import base_addr ##for use in to_pdf etc
+from wiki.web import base_addr  ##for use in to_pdf etc
 from wiki.web.user import protect
+from wiki.core import Wiki
 
+import os
+import sys
+
+import pypandoc
 
 bp = Blueprint('wiki', __name__)
 
@@ -38,21 +46,13 @@ def home():
     return render_template('home.html')
 
 
-@bp.route('/topdf/')
-@protect #this just wraps the function to make sure the user is authenticated
-def toPdf():
-    ##get urls
-    index = current_wiki.index()
-    for page in index:
-        print url_for('wiki.display', url=page.url)
-        ##TODO store these in something, we need url and path to the .md file
-    ##get current url
-    ref = request.referrer
-    ref = ref.replace(base_addr, '')
-    ##TODO match current url to that of a page from the index, and thus a path to its markdown file
-    ##TODO make sure that we deal with the edge case of home having a special url ( '/' )
-    ##TODO call pandoc to make pdf with this path
-    return redirect(request.referrer) ##don't navigate away from the page
+@bp.route('/<path:url>/topdf/')
+@protect  # this just wraps the function to make sure the user is authenticated
+def toPdf(url):
+    pypandoc.convert('content/' + url + '.md', 'pdf', outputfile='content/pandocTemp/' + url + '.pdf',
+                     extra_args=['-V geometry:margin=1.5cm'])
+    return send_file('../../content/pandocTemp/' + url + '.pdf', conditional=True)
+
 
 @bp.route('/index/')
 @protect
@@ -188,6 +188,7 @@ def user_admin(user_id):
 def user_delete(user_id):
     pass
 
+
 """
     Error Handlers
     ~~~~~~~~~~~~~~
@@ -197,4 +198,3 @@ def user_delete(user_id):
 @bp.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
-
