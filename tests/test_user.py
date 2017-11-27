@@ -2,21 +2,24 @@ from unittest import TestCase
 from wiki.web.user import UserManager
 import os
 
+
 class UserTestCase(TestCase):
     """
-        Tests creating a new json file, and tries to create a new file when one is already made
+        Tests User Class and UserManager class
     """
 
     def test_new_json_file(self):
-        os.remove("users.json")
+        """
+            Tests creating a new json file, and tries to create a new file when one is already made
+        """
         um = UserManager("")
 
         um = UserManager("")
 
-    """
-        Tests creating a new json file, and tries to create a new file when one is already made
-    """
     def test_user_read_write_json(self):
+        """
+            Tests reading and writing back a json users file
+        """
         um = UserManager("")
         json = um.read()
 
@@ -27,8 +30,9 @@ class UserTestCase(TestCase):
         assert um.read() is not None
 
     def test_user_creation_cleartext(self):
-        # print(os.getcwd())
-
+        """
+            Tests creation of a user using UserManager
+        """
         username = "clear name"
         password = "clear pass"
         um = UserManager("")
@@ -38,15 +42,22 @@ class UserTestCase(TestCase):
         assert cleartext_user is not None
 
     def test_same_name(self):
+        """
+            Tests whether you can create two users with the same name
+        """
         username = "clear name"
         password = "clear pass"
         um = UserManager("")
 
         cleartext_user = um.add_user(username, password, True, ["admin"], "cleartext")
 
+
         assert cleartext_user is not None
 
     def test_not_implemented_auth(self):
+        """
+            Tests the encryption scheme not implemented exception
+        """
         username = "none name"
         password = "none pass"
         um = UserManager("")
@@ -61,6 +72,9 @@ class UserTestCase(TestCase):
         assert is_caught is True
 
     def test_user_creation_hash(self):
+        """
+            Tests creating a user with hashed password
+        """
         # print(os.getcwd())
 
         username = "hash name"
@@ -72,6 +86,9 @@ class UserTestCase(TestCase):
         assert hash_user is not None
 
     def test_user_get(self):
+        """
+            Tests creating a user with cleartext password
+        """
         username = "get name"
         password = "get pass"
         um = UserManager("")
@@ -81,6 +98,9 @@ class UserTestCase(TestCase):
         assert um.get_user(username) is not None
 
     def test_user_delete(self):
+        """
+            Tests deleting a user
+        """
         username = "delete name"
         password = "delete pass"
         um = UserManager("")
@@ -96,6 +116,9 @@ class UserTestCase(TestCase):
         assert um.delete_user("user never has been created") is False
 
     def test_user_update(self):
+        """
+        Tests updating a user
+        """
         username = "update name"
         password = "update pass"
         um = UserManager("")
@@ -105,7 +128,6 @@ class UserTestCase(TestCase):
         data = cleartext_user.data
 
         um.update(username, data)
-
 
     def test_simple_user(self):
         """
@@ -147,7 +169,11 @@ class UserTestCase(TestCase):
             is_caught = True
         assert is_caught
 
-
+    def tearDown(self):
+        try:
+            os.remove("users.json")
+        except:
+            None
 
 
 

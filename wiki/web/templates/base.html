@@ -20,6 +20,7 @@
 								<li><a href="{{ url_for('wiki.tags') }}">Tags</a></li>
 								<li><a href="{{ url_for('wiki.search') }}">Search</a></li>
 								<li><a href="{{ url_for('wiki.settings')}}">Settings</a></li>
+								<li><a href="{{ url_for('wiki.ebook')}}">eBook Creator</a></li>
 								<li class="divider-vertical"></li>
 								<li><a href="{{ url_for('wiki.create') }}">New Page</a></li>
 								<li class="divider-vertical"></li>
@@ -27,10 +28,10 @@
 							</ul>
 
 							<ul class="nav pull-right">
-								{% if current_user.is_anonymous %}
-									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
-								{% else %}
+								{% if current_user.is_authenticated %}
 									<li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
+								{% else %}
+									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
 								{% endif %}
 							</ul>
 						</div>

@@ -5,10 +5,10 @@
 from flask import Blueprint
 from flask import flash
 from flask import redirect
-from flask import request
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import send_file
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
@@ -22,10 +22,11 @@ from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
-from wiki.web import base_addr ##for use in to_pdf etc
+# from wiki.web import base_addr  ##for use in to_pdf etc
 from wiki.web.user import protect
 
-
+import pypandoc
+from os import system
 
 bp = Blueprint('wiki', __name__)
 
@@ -39,21 +40,13 @@ def home():
     return render_template('home.html')
 
 
-@bp.route('/topdf/')
-@protect #this just wraps the function to make sure the user is authenticated
-def toPdf():
-    ##get urls
-    index = current_wiki.index()
-    for page in index:
-        print url_for('wiki.display', url=page.url)
-        ##TODO store these in something, we need url and path to the .md file
-    ##get current url
-    ref = request.referrer
-    ref = ref.replace(base_addr, '')
-    ##TODO match current url to that of a page from the index, and thus a path to its markdown file
-    ##TODO make sure that we deal with the edge case of home having a special url ( '/' )
-    ##TODO call pandoc to make pdf with this path
-    return redirect(request.referrer) ##don't navigate away from the page
+@bp.route('/<path:url>/topdf/')
+@protect  # this just wraps the function to make sure the user is authenticated
+def toPdf(url):
+    pypandoc.convert('content/' + url + '.md', 'pdf', outputfile='content/pandocTemp/' + url + '.pdf',
+                     extra_args=['-V geometry:margin=1.5cm'])
+    return send_file('../../content/pandocTemp/' + url + '.pdf', conditional=True)
+
 
 @bp.route('/index/')
 @protect
@@ -170,21 +163,26 @@ def user_logout():
     flash('Logout successful.', 'success')
     return redirect(url_for('wiki.index'))
 
+
 @bp.route('/user/')
 def user_index():
     pass
+
 
 @bp.route('/user/create/')
 def user_create():
     pass
 
+
 @bp.route('/user/<int:user_id>/')
 def user_admin(user_id):
     pass
 
+
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
+
 
 @bp.route('/settings/', methods=['GET', 'POST'])
 @protect
@@ -201,6 +199,7 @@ def settings( ):
         return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
     return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
 
+
 @bp.route('/setEditor/<path:url>/', methods=['POST'])
 @protect
 def setEditor(url):
@@ -208,12 +207,14 @@ def setEditor(url):
     current_user.set('editor', editor)
     return redirect(url)
 
+
 @bp.route('/setEmail/<path:url>/', methods=['POST'])
 @protect
 def setEmail(url):
     email = request.form['value']
     current_user.set('email', email)
     return redirect(url)
+
 
 @bp.route('/googleScholar/<path:url>/', methods=['GET'])
 @protect
@@ -223,15 +224,38 @@ def googleScholar(url):
     googleURL = 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C18&q=' + title + '&btnG='
     return redirect(googleURL)
 
+
 @bp.route("/customEditor/<path:url>", methods=['GET'])
 @protect
 def customEditor(url):
+    source_path = current_wiki.attr_by_url( "path", url )
+    editor_path = current_user.get("editor")
+    system(editor_path + " " + source_path)
     return redirect(url)
+
 
 @bp.route("/testRoute/<path:url>")
 @protect
 def testRoute(url):
-    list = current_wiki.attr_by_url('path', 'world')
+    temp = current_user.is_anonymous()
+    return redirect(url)
+
+
+@bp.route("/ebook/", methods=['GET', 'POST'])
+@protect
+def ebook():
+    ebookUrl = "ebook"
+    form = SettingsForm()
+    if form.validate_on_submit():
+        return render_template('ebook.html', form=form, ebookUrl=ebookUrl)
+    return render_template('ebook.html', form=form, ebookUrl=ebookUrl)
+
+
+@bp.route("/ebookGen/<path:url>", methods=['POST'])
+@protect
+def ebookGen(url):
+    ebook_req = request.form['value']
+    current_wiki.chapterfy_and_build( current_wiki.assemble_source_list ( current_wiki.parse_request( ebook_req )))
     return redirect(url)
 
 
@@ -250,6 +274,7 @@ def subscribe(url):
         f.close()
     return redirect(request.referrer)  ##don't navigate away from the page
 
+
 """
     Error Handlers
     ~~~~~~~~~~~~~~
@@ -259,4 +284,3 @@ def subscribe(url):
 @bp.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
-

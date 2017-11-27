@@ -13,8 +13,9 @@ import markdown
 
 import smtplib
 from string import Template
-from string import replace
-
+from tempfile import mkstemp
+from shutil import move
+from os import remove
 
 def clean_url(url):
     """
@@ -435,7 +436,6 @@ class Wiki(object):
             retList.append(page.path)
         return retList
 
-
     ##returns given attr from the url of a page
     ##valid attrs include: "path" ( to source file ), "title", "tags", "url" etc.
     ##will return None if url is invalid
@@ -445,3 +445,51 @@ class Wiki(object):
             if url == page.url:
                 return eval('page.' + attr)
         return None
+
+    def parse_request(self, req):
+        def strip_n_check(brack, token):
+            brack_map = {'(': {'left': '{[', 'right': '}]', 'check': ')'},
+                         '{': {'left': '([', 'right': ')]', 'check': '}'},
+                         '[': {'left': '{(', 'right': '})', 'check': ']'}}
+            token = token.rstrip(brack_map[brack]['right']).lstrip(brack_map[brack]['left'])
+            if token[-1:] == brack_map[brack]['check'] and token[:1] == brack:
+                return True, token.rstrip(')}]').lstrip('({[')
+            return False, token
+        top_split = req.split('~')
+        attrMap = {'body': '{', 'title': '(', 'tags': '['}
+        token_counter = 0
+        token_map = {}
+        for token in top_split:
+            type_map = {key: value for (key, value) in
+                       [(attr, strip_n_check(brack, token)) for (attr, brack) in attrMap.iteritems()]
+                       }
+            for type in ('title', 'tags', 'body'):
+                if type_map[type][0] == True:
+                    token_map[token_counter] = {type: type_map[type][1].split('&')}
+                    token_counter += 1
+        return token_map
+
+    def assemble_source_list(self, search_dict):
+        source_list = []
+        for x in range(0, len( search_dict.keys() )):
+            search_listlet = []
+            cur_dict = search_dict[x]
+            attr = cur_dict.keys()[0] ##can only ever have one
+            terms = cur_dict[attr]
+            for term in terms:
+                search_listlet.extend( self.search( term, attrs=[ attr ] ) )
+            source_list.extend( search_listlet )
+        return map( lambda x : x.path, source_list) ##map from pages to their source
+
+    def chapterfy_and_build(self, source_list):
+        def replace(source_file_path, pattern, substring):
+            fh, target_file_path = mkstemp()
+            with open(target_file_path, 'w') as target_file:
+                with open(source_file_path, 'r') as source_file:
+                    for line in source_file:
+                        target_file.write(line.replace(pattern, substring))
+            return target_file_path
+        source_list = map( lambda x: replace(x, 'title:', '#'), source_list)
+        source_list = map( lambda x: replace(x, 'tags:', '\n* tags:'), source_list)
+        os.system( "pandoc -N " + reduce( lambda x, y : x + "gap.md " + y, map( lambda x: x + ' ', source_list) ) + "-o out.pdf")
+        map( lambda x : remove(x), source_list)

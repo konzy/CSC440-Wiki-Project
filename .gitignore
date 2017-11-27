@@ -58,3 +58,6 @@ fabric.properties
 
 .DS_Store
 .cache/
+
+# Temp pandoc pdf files
+*.pdf
