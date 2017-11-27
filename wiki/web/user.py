@@ -101,7 +101,7 @@ class User(object):
         return self.data.get('active')
 
     def is_anonymous(self):
-        return False
+        return True
 
     def get_id(self):
         return self.name
