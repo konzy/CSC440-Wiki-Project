@@ -1,0 +1,68 @@
+{
+  "Test2": {
+    "authenticated": false, 
+    "roles": [
+      "Admin"
+    ], 
+    "authentication_method": "cleartext", 
+    "editor": "", 
+    "active": true, 
+    "password": "password", 
+    "email": ""
+  }, 
+  "Hash": {
+    "hash": "26429344a9a39011e3c9ed4f49dd191ceed2493ff4336d0c46320548b9f0dd6c7349081e62ab0685c159edf00b097c46443674e548a677da135bc26870f37ac8a54021058b20f84923e793195c3be127cffdbb6db831c5e519250d19148c7c1fcda87f3bd0698fce7ef4fe15859b8a083e1c5cb1b21d6ea2a68d6093a16cab69", 
+    "roles": [
+      "Admin"
+    ], 
+    "authentication_method": "hi", 
+    "editor": "", 
+    "active": true, 
+    "authenticated": true, 
+    "email": ""
+  }, 
+  "clear name": {
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ], 
+    "authentication_method": "cleartext", 
+    "editor": "", 
+    "active": true, 
+    "password": "clear pass", 
+    "email": ""
+  }, 
+  "hash name": {
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ], 
+    "authentication_method": "hash", 
+    "editor": "", 
+    "active": true, 
+    "hash": "13a1ad4c0306fd6bacdd2a0214474d37d3aa8206cfcaba527a8f4581055280b8e05fb610b31e61e8c21793469bdd9ebfb9009162e9231535168deb22e97ab46d0db1407a9237c3cd6260b0f23b4003210b546693bd046c59953be4b7fe3750f1cda605a4aa1015cdabb0c5b1e351169751000f40bf19ec890d492881611ac8b4", 
+    "email": ""
+  }, 
+  "update name": {
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ], 
+    "authentication_method": "cleartext", 
+    "editor": "", 
+    "active": true, 
+    "password": "update pass", 
+    "email": ""
+  }, 
+  "get name": {
+    "authenticated": false, 
+    "roles": [
+      "admin"
+    ], 
+    "authentication_method": "cleartext", 
+    "editor": "", 
+    "active": true, 
+    "password": "get pass", 
+    "email": ""
+  }
+}

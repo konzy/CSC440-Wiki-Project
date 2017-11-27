@@ -4,10 +4,11 @@ from mock import patch
 import os
 from unittest import TestCase
 
-from wiki.core import clean_url
+from wiki.core import clean_url, email
 from wiki.core import wikilink
 from wiki.core import Page
 from wiki.core import Processor
+from wiki.web.user import UserManager
 
 from . import WikiBaseTestCase
 
@@ -331,3 +332,41 @@ class WikiTestCase(WikiBaseTestCase):
         self.create_file("index_by.md", PAGE_CONTENT)
         tags = self.wiki.index_by(u'tags')
         assert tags.keys()[0] == u'one, two, 3, jö'
+
+
+
+
+class EmailTestCase(TestCase):
+    """
+        Tests that email is sent when page is edited
+    """
+
+    def test_email_sent(self):
+        name = 'user'
+        password = '1234'
+        active = True
+        roles = ['Admin']
+        authentication_method = 'hash'
+        os.remove("users.json")
+        user_manager = UserManager('')
+        hash_user = user_manager.add_user(name, password, active, roles, authentication_method)
+        hash_user.set('authenticated', True)
+        hash_user.set('email', 'cmschwegman@gmail.com')
+        url = "test"
+        alreadySub = False
+        with open("content/subscriptions.txt", mode='r') as contacts_file:
+            for a_contact in contacts_file:
+                if (a_contact.split()[1] == str(hash_user.get_id())):
+                    if (a_contact.split()[0] == str(url)):
+                        alreadySub = True
+        if (not alreadySub):
+            f = open('content/subscriptions.txt', 'a+')
+            f.write(u'' + url + ' ' + str(hash_user.get_id()) + '\n')
+            f.close()
+        is_caught = False
+        try:
+            email(url, hash_user)
+        except:
+            is_caught = True
+        assert is_caught is False
+
