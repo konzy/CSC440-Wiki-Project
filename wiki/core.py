@@ -77,8 +77,8 @@ def email(page, current_user):
     emails = []
     with open("content/subscriptions.txt", mode='r', encoding='utf-8') as contacts_file:
         for a_contact in contacts_file:
-            if(a_contact.split()[1] == page):
-                names.append(a_contact.split()[0])
+            if(a_contact.split()[0] == page):
+                names.append(a_contact.split()[1])
                 emails.append(current_user.get('email'))
 
     #get the message ready to send to the contacts
