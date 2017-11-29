@@ -424,10 +424,17 @@ class Wiki(object):
                     break
         return matched
 
-    ##returns all the source files by either title, type, or by a search of the body
-    ##uses the search function, so it admits regex
-    ##returns a list of paths to md files
+
     def source_files_by_search(self, term, ignore_case=True, attr_type=['title']):
+        '''
+        Returns all the source files by either title, type, or by a search of the body
+        Uses the search function, so it admits regex
+        Returns a list of paths to md files
+        :param term:
+        :param ignore_case:
+        :param attr_type:
+        :return:
+        '''
         retList = list()
         if term is None or term == []:
             return "source_files_by_search: Invalid term, None or empty list"
@@ -436,10 +443,16 @@ class Wiki(object):
             retList.append(page.path)
         return retList
 
-    ##returns given attr from the url of a page
-    ##valid attrs include: "path" ( to source file ), "title", "tags", "url" etc.
-    ##will return None if url is invalid
     def attr_by_url(self, attr, url):
+        '''
+        Returns given attr from the url of a page
+        Valid attrs include: "path" ( to source file ), "title", "tags", "url" etc.
+        Will return None if url is invalid
+
+        :param attr:
+        :param url:
+        :return:
+        '''
         pages = self.index()
         for page in pages:
             if url == page.url:
@@ -447,6 +460,12 @@ class Wiki(object):
         return None
 
     def parse_request(self, req):
+        '''
+        Parses an ebook request, made in the ebook spec language
+        :param req: ebook request
+        :return: a map in this specification { N : { attr : term } ... }
+        where N is the ordering of this search, attr is the attr that will be searched and term is the term to search for
+        '''
         def strip_n_check(brack, token):
             brack_map = {'(': {'left': '{[', 'right': '}]', 'check': ')'},
                          '{': {'left': '([', 'right': ')]', 'check': '}'},
@@ -470,6 +489,12 @@ class Wiki(object):
         return token_map
 
     def assemble_source_list(self, search_dict):
+        '''
+        Assembles a list of source files for use in building ebook
+        :param search_dict: a map in this specification { N : { attr : term } ... }
+        where N is the ordering of this search, attr is the attr that will be searched and term is the term to search for
+        :return: A list of source files for wiki pages
+        '''
         source_list = []
         for x in range(0, len( search_dict.keys() )):
             search_listlet = []
@@ -482,6 +507,11 @@ class Wiki(object):
         return map( lambda x : x.path, source_list) ##map from pages to their source
 
     def chapterfy_and_build(self, source_list):
+        '''
+        modifies source files so that they display properly when built into a pdf
+        :param source_list: A list of source files
+        :return: A list of source files 
+        '''
         def replace(source_file_path, pattern, substring):
             fh, target_file_path = mkstemp()
             with open(target_file_path, 'w') as target_file:
