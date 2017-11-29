@@ -38,3 +38,8 @@ Also, make sure the current working directory of this run configuration is the p
 
 12. In the run box at the bottom of the screen, a web address will be displayed. Navigate to this in your browser to access wiki
 
+{% if display_github %}
+    <li><a href="https://github.com/{{ github_user }}/{{ github_repo }}
+    /blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}.rst">
+    Show on GitHub</a></li>
+{% endif %}
