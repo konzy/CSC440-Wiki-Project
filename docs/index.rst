@@ -55,6 +55,7 @@ can be whatever you want):
 Now you can install the packages in requirements.txt
 
 .. code-block:: bash
+
     pip install -r requirements.txt
 
 Running the Project
