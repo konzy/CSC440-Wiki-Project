@@ -370,3 +370,7 @@ class EmailTestCase(TestCase):
             is_caught = True
         assert is_caught is False
 
+    def test_parse_request(self):
+        req1 = '(*.)'
+        req2 = '(david)&]'
+
