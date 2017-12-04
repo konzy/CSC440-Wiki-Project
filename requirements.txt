@@ -1,3 +1,4 @@
+recommonmark
 flask
 flask-Testing
 flask-SQLAlchemy

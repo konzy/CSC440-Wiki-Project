@@ -100,6 +100,9 @@ class User(object):
     def is_active(self):
         return self.data.get('active')
 
+    def is_admin(self):
+        return self.data.get('admin')
+
     def is_anonymous(self):
         return True
 

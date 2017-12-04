@@ -1,7 +1,8 @@
 {
   "name": {
-    "authenticated": true, 
+    "authenticated": false, 
     "roles": [], 
+    "admin": true, 
     "authentication_method": "cleartext", 
     "editor": "", 
     "active": true, 
@@ -16,5 +17,14 @@
     "active": true, 
     "password": "1234", 
     "email": "gallaghere2@mymail.nku.edu"
+  }, 
+  "ethan": {
+    "authenticated": false, 
+    "roles": [], 
+    "authentication_method": "cleartext", 
+    "editor": "", 
+    "active": true, 
+    "password": "dinv", 
+    "email": ""
   }
 }
