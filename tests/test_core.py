@@ -333,8 +333,11 @@ class WikiTestCase(WikiBaseTestCase):
         tags = self.wiki.index_by(u'tags')
         assert tags.keys()[0] == u'one, two, 3, jö'
 
-
-
+    def test_request(self):
+        '''
+        Test the eBook request function
+        :return:
+        '''
 
 class EmailTestCase(TestCase):
     """
@@ -370,7 +373,4 @@ class EmailTestCase(TestCase):
             is_caught = True
         assert is_caught is False
 
-    def test_parse_request(self):
-        req1 = '(*.)'
-        req2 = '(david)&]'
 

@@ -24,6 +24,9 @@ from wiki.web import current_wiki
 from wiki.web import current_users
 # from wiki.web import base_addr  ##for use in to_pdf etc
 from wiki.web.user import protect
+from wiki.web.user import User
+from wiki.web.user import UserManager
+
 
 import pypandoc
 from os import system
@@ -199,6 +202,27 @@ def settings( ):
         return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
     return render_template('settings.html', form=form, email=email, editor=editor, settingsUrl=settingsUrl )
 
+@bp.route('/admin/', methods=['GET','POST'])
+@protect
+def admin( ):
+    print current_user.is_admin()
+    adminUrl = "admin"
+    form = SettingsForm()
+    default="username, password"
+    if form.validate_on_submit():
+        return render_template('admin.html', form=form, default=default, adminUrl=adminUrl )
+    return render_template('admin.html', form=form, default=default, adminUrl=adminUrl )
+
+@bp.route('/newUser/<path:url>', methods=['POST'])
+@protect
+def newUser(url):
+    val = request.form['value']
+    vals = val.split(",")
+    name = vals[0].lstrip().rstrip()
+    password = vals[1].lstrip().rstrip()
+    new = UserManager('user')
+    new.add_user(name, password)
+    return redirect(url)
 
 @bp.route('/setEditor/<path:url>/', methods=['POST'])
 @protect
