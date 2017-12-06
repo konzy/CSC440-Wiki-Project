@@ -105,6 +105,19 @@ def email(page, current_user):
     except smtplib.SMTPException:
         print "Error: unable to send email"
 
+def subscribe(page, user):
+    alreadySub = False
+    with open("content/subscriptions.txt", mode='r') as contacts_file:
+        for a_contact in contacts_file:
+            if(a_contact.split()[1] == str(user.get_id())):
+                if(a_contact.split()[0] == str(page)):
+                    alreadySub = True
+    if(not alreadySub):
+        f = open('content/subscriptions.txt', 'a+')
+        f.write(u'' + str(page) + ' ' + str(user.get_id()) + '\n')
+        f.close()
+
+
 
 class Processor(object):
     """
