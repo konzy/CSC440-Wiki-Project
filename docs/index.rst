@@ -29,6 +29,10 @@ Features
 
 - Download page as a pdf
 - Search for page title on google scholar
+- Users have passwords encrypted
+- Admin user can add users
+- Users can receive email notifications when a page is updated
+- Users can open page in favorite text editor for editing
 
 Requirements
 ------------
