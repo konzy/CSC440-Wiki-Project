@@ -150,7 +150,7 @@ class UserTestCase(TestCase):
 
         assert hash_user.get_id() == name
 
-        assert hash_user.is_anonymous() is False
+        assert hash_user.is_anonymous() is True
 
         assert hash_user.check_password(password)
 
