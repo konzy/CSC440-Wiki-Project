@@ -336,8 +336,40 @@ class WikiTestCase(WikiBaseTestCase):
     def test_request(self):
         '''
         Test the eBook request function
+        :return: nothin
+        '''
+        #test typical test case
+        ret1 = {0: {'title': ['sushi', 'steak']}, 1: {'body': ['sushi', 'steak']}, 2: {'body': ['whiskey']}, 3: {'title': ['chili', 'beans']}, 4: {'tags': ['chili', 'beans']}}
+        ret1_test = self.wiki.parse_request('({sushi&steak})~{whiskey}~([chili&beans])')
+        assert ret1 == ret1_test
+        #test empty case
+        ret2 = {}
+        ret2_test = self.wiki.parse_request('')
+        assert ret2 == ret2_test
+        #test for subjects not in wiki
+        ret3 = { 0: {'title' : ['sushi','steak']}}
+        ret3_test = self.wiki.parse_request('(sushi&steak)')
+        assert ret3 == ret3_test
+
+    def test_assemble_source_list(self):
+        '''
+        Test the assemble_source_list function
         :return:
         '''
+        self.create_file("gets.md", PAGE_CONTENT)
+        ret1_test = self.wiki.assemble_source_list( { 0: { 'title': ['Test']}})
+        assert len( ret1_test ) == 1
+
+    def test_chapterfy_and_build(self):
+        '''
+        Test the chaptery_and_build function
+        :return:
+        '''
+        self.create_file("gets.md", PAGE_CONTENT)
+        ret1_test = self.wiki.assemble_source_list({0: {'title': ['Test']}})
+        self.wiki.chapterfy_and_build( ret1_test )
+        assert True ##no error
+
 
 class EmailTestCase(TestCase):
     """

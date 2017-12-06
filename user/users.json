@@ -1,4 +1,13 @@
 {
+  "sam": {
+    "authenticated": false, 
+    "roles": [], 
+    "authentication_method": "cleartext", 
+    "editor": "gedit", 
+    "active": true, 
+    "password": "1234", 
+    "email": "gallaghere2@mymail.nku.edu"
+  }, 
   "name": {
     "authenticated": false, 
     "roles": [], 
@@ -9,17 +18,17 @@
     "password": "1234", 
     "email": "cmschwegman@gmail.com"
   }, 
-  "sam": {
-    "authenticated": true, 
+  "temp": {
+    "authenticated": false, 
     "roles": [], 
     "authentication_method": "cleartext", 
-    "editor": "gedit", 
+    "editor": "", 
     "active": true, 
-    "password": "1234", 
-    "email": "gallaghere2@mymail.nku.edu"
+    "password": "bs", 
+    "email": ""
   }, 
   "ethan": {
-    "authenticated": false, 
+    "authenticated": true, 
     "roles": [], 
     "authentication_method": "cleartext", 
     "editor": "", 
