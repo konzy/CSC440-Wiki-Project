@@ -7,7 +7,7 @@ from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 
 from wiki.core import Wiki
-from wiki.web.user import UserManager
+from user import UserManager
 
 class WikiError(Exception):
     pass
